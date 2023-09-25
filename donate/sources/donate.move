@@ -5,6 +5,7 @@ module donate::donate {
     use aptos_framework::coin::{Self, transfer};
     use aptos_framework::event::{Self, EventHandle};
     use aptos_framework::timestamp;
+    use std::string::String;
 
     const ENotEoughtCoinToDonate: u64 = 1;
 
@@ -17,6 +18,7 @@ module donate::donate {
     struct DonateEvent has store, drop {
         donator: address,
         receiver: address,
+        coin_type: String,
         amount: u64,
         timestamp: u64
     }
@@ -30,19 +32,20 @@ module donate::donate {
     }
 
     public fun update_donate_count(donate_account: &mut DonateAccount) {
+        let donate_count_ref = donate_account.donate_count;
         let donate_count_mut = &mut donate_account.donate_count;
-        *donate_count_mut = donate_account.donate_count + 1;
+        *donate_count_mut = donate_count_ref + 1;
     }
 
     public fun emit_donate_event(donator: &signer, amount: u64, receiver: address, donate_account: &mut DonateAccount) {
         event::emit_event<DonateEvent>(
             &mut donate_account.donate_event,
-            DonateEvent(
-                signer::address_of(donator),
+            DonateEvent{
+                donator: signer::address_of(donator),
                 receiver,
                 amount,
-                timestamp::now_microseconds()
-            ));
+                timestamp: timestamp::now_microseconds()}
+            );
     }
 
     public entry fun donate_to_user<CoinType>(donator: &signer, amount: u64, receiver: address) acquires DonateAccount {
