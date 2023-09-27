@@ -1,0 +1,20 @@
+[package]
+name = "donate"
+version = "1.0.0"
+authors = []
+
+[addresses]
+
+donate="7c718a4c2b1885d8197e5340acd38831ae0a38700651289c572078dd9131fb8b"
+
+[dev-addresses]
+
+[dependencies]
+AptosFramework = { local = "../../../projects/aptos-core/aptos-move/framework/aptos-framework" }
+
+#[dependencies.AptosFramework]
+#git = "https://github.com/aptos-labs/aptos-core.git"
+#rev = "mainnet"
+#subdir = "aptos-move/framework/aptos-framework"
+
+[dev-dependencies]
